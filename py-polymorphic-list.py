@@ -17,13 +17,13 @@ class List(Generic[T]):
         raise NotImplementedError()
 
 
-class NonEmptyList(List):
+class NonEmptyList(List[T]):
     def __init__(self, data, next: List):
         self.data: T = data
         self.next: List[T] = next
 
 
-class EmptyList(List):
+class EmptyList(List[T]):
     def __init__(self, ):
         self.data: T = None
         self.next: List[T] = None
