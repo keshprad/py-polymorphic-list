@@ -1,5 +1,7 @@
-from .exceptions import ListIsEmptyError
+from copy import copy
 from typing import Generic, TypeVar, Union
+# Local imports
+from .exceptions import ListIsEmptyError
 
 T = TypeVar("T")
 
@@ -52,6 +54,14 @@ class PolymorphicList(Generic[T]):
         """
         raise NotImplementedError()
 
+    def __copy__(self) -> 'Union[NonEmptyList[T], EmptyList[T]]':
+        """Returns a copy of the list
+
+        Returns:
+            Union[NonEmptyList[T], EmptyList[T]]: A copy of the list.
+        """
+        raise NotImplementedError()
+
     def size(self) -> int:
         """Finds the size/length of the list
 
@@ -60,7 +70,7 @@ class PolymorphicList(Generic[T]):
         """
         raise NotImplementedError()
 
-    def append(self, element: T) -> 'NonEmptyList':
+    def append(self, element: T) -> 'NonEmptyList[T]':
         """Appends an element to the beginning of the list
 
         Args:
@@ -71,7 +81,7 @@ class PolymorphicList(Generic[T]):
         """
         raise NotImplementedError()
 
-    def prepend(self, element: T) -> 'NonEmptyList':
+    def prepend(self, element: T) -> 'NonEmptyList[T]':
         """Prepends an element to the beginning of the list
 
         Args:
@@ -82,7 +92,7 @@ class PolymorphicList(Generic[T]):
         """
         raise NotImplementedError()
 
-    def get(self, index: int) -> 'NonEmptyList':
+    def get(self, index: int) -> 'NonEmptyList[T]':
         """Gets the NonEmptyList at the given index
 
         Args:
@@ -96,7 +106,7 @@ class PolymorphicList(Generic[T]):
         """
         raise NotImplementedError()
 
-    def get_last(self) -> 'NonEmptyList':
+    def get_last(self) -> 'NonEmptyList[T]':
         """Gets the last NonEmptyList element in the list.
 
         Raises:
@@ -181,7 +191,13 @@ class NonEmptyList(PolymorphicList[T]):
             return True
         return element in self.next
 
-    # def __add__(self, other: object) -> Union['NonEmptyList', 'EmptyList']:
+    def __copy__(self) -> 'NonEmptyList[T]':
+        """Returns a copy of the NonEmptyList
+
+        Returns:
+            NonEmptyList: A copy of the NonEmptyList and its next references.
+        """
+        return NonEmptyList(self.data, copy(self.next))
 
     def size(self) -> int:
         """Finds the size/length of the list
@@ -191,7 +207,7 @@ class NonEmptyList(PolymorphicList[T]):
         """
         return self.length
 
-    def append(self, element: T) -> 'NonEmptyList':
+    def append(self, element: T) -> 'NonEmptyList[T]':
         """Appends an element to the beginning of the list
 
         Args:
@@ -204,7 +220,7 @@ class NonEmptyList(PolymorphicList[T]):
         self.length += 1
         return self
 
-    def prepend(self, element: T) -> 'NonEmptyList':
+    def prepend(self, element: T) -> 'NonEmptyList[T]':
         """Prepends an element to the beginning of the list
 
         Args:
@@ -215,7 +231,7 @@ class NonEmptyList(PolymorphicList[T]):
         """
         return NonEmptyList(element, self)
 
-    def get(self, index: int) -> 'NonEmptyList':
+    def get(self, index: int) -> 'NonEmptyList[T]':
         """Gets the NonEmptyList at the given index
 
         Args:
@@ -234,7 +250,7 @@ class NonEmptyList(PolymorphicList[T]):
         else:
             return self.next.get(index - 1)
 
-    def get_last(self) -> 'NonEmptyList':
+    def get_last(self) -> 'NonEmptyList[T]':
         """Gets the last NonEmptyList element in the list.
 
         Returns:
@@ -305,6 +321,14 @@ class EmptyList(PolymorphicList[T]):
         """
         return False
 
+    def __copy__(self) -> 'EmptyList[T]':
+        """Returns a copy of the list object
+
+        Returns:
+            EmptyList: A copy of the EmptyList object.
+        """
+        return EmptyList()
+
     def size(self) -> int:
         """Finds the size/length of the list
 
@@ -313,7 +337,7 @@ class EmptyList(PolymorphicList[T]):
         """
         return self.length
 
-    def append(self, element: T) -> NonEmptyList:
+    def append(self, element: T) -> NonEmptyList[T]:
         """Appends an element to the beginning of the list
 
         Args:
@@ -324,7 +348,7 @@ class EmptyList(PolymorphicList[T]):
         """
         return NonEmptyList(element, self)
 
-    def prepend(self, element: T) -> 'NonEmptyList':
+    def prepend(self, element: T) -> NonEmptyList[T]:
         """Prepends an element to the beginning of the list
 
         Args:
@@ -335,7 +359,7 @@ class EmptyList(PolymorphicList[T]):
         """
         return NonEmptyList(element, self)
 
-    def get(self, index: int) -> NonEmptyList:
+    def get(self, index: int) -> NonEmptyList[T]:
         """Gets the NonEmptyList at the given index
 
         Args:
@@ -349,7 +373,7 @@ class EmptyList(PolymorphicList[T]):
         """
         raise IndexError("Index out of range")
 
-    def get_last(self) -> 'NonEmptyList':
+    def get_last(self) -> NonEmptyList[T]:
         """Gets the last NonEmptyList element in the list. Raises ListIsEmptyError if this is an EmptyList
 
         Raises:
