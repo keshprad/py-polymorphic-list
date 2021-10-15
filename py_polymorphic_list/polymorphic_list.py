@@ -50,6 +50,14 @@ class PolymorphicList(Generic[T]):
         """
         raise NotImplementedError()
 
+    def size(self) -> int:
+        """Finds the size/length of the list
+
+        Returns:
+            int: The size/length of the list
+        """
+        raise NotImplementedError()
+
     def append(self, element: T) -> 'NonEmptyList':
         """Appends an element to the beginning of the list
 
@@ -88,6 +96,7 @@ class NonEmptyList(PolymorphicList[T]):
         """
         self.data: T = data
         self.next: PolymorphicList[T] = next
+        self.length: int = self.next.length + 1
 
     def __str__(self) -> str:
         """Creates a string representation for the NonEmptyList
@@ -130,6 +139,14 @@ class NonEmptyList(PolymorphicList[T]):
             return True
         return element in self.next
 
+    def size(self) -> int:
+        """Finds the size/length of the list
+
+        Returns:
+            int: The size/length of the list
+        """
+        return self.length
+
     def append(self, element: T) -> 'NonEmptyList':
         """Appends an element to the beginning of the list
 
@@ -140,6 +157,7 @@ class NonEmptyList(PolymorphicList[T]):
             NonEmptyList: Object for the new list after append operation.
         """
         self.next = self.next.append(element)
+        self.length += 1
         return self
 
     def prepend(self, element: T) -> 'NonEmptyList':
@@ -161,8 +179,9 @@ class EmptyList(PolymorphicList[T]):
         PolymorphicList ([type]): Extends the PolymorphicList class to have a generic type T.
     """
     def __init__(self):
-        """Initializes the EmptyList. Does nothing, but exists to prevent the super __init__ from being called.
+        """Initializes the state of the EmptyList.
         """
+        self.length: int = 0
         pass
 
     def __str__(self) -> str:
@@ -195,6 +214,14 @@ class EmptyList(PolymorphicList[T]):
             bool: a boolean indication of whether the element was found.
         """
         return False
+
+    def size(self) -> int:
+        """Finds the size/length of the list
+
+        Returns:
+            int: The size/length of the list
+        """
+        return self.length
 
     def append(self, element: T) -> NonEmptyList:
         """Appends an element to the beginning of the list
