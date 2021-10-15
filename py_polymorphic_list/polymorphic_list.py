@@ -1,4 +1,4 @@
-from typing import Generic, TypeVar
+from typing import Generic, TypeVar, Union
 
 T = TypeVar("T")
 
@@ -95,7 +95,21 @@ class PolymorphicList(Generic[T]):
         Returns:
             NonEmptyList: Returns the NonEmptyList at the input index if exists.
         """
-        raise IndexError("Index out of range")
+        raise NotImplementedError()
+
+    def index_of(self, element: T) -> int:
+        """Finds the index of the first occurence of element param in the polymorphic list
+
+        Args:
+            element (T): The type T element to look for.
+
+        Raises:
+            ValueError: raised if the element not in list
+
+        Returns:
+            int: The index of the first occurence of element if found
+        """
+        raise NotImplementedError()
 
 
 class NonEmptyList(PolymorphicList[T]):
@@ -104,7 +118,7 @@ class NonEmptyList(PolymorphicList[T]):
     Args:
         PolymorphicList ([type]): Extends the PolymorphicList class to have a generic type T.
     """
-    def __init__(self, data, next: PolymorphicList):
+    def __init__(self, data, next: Union['NonEmptyList', 'EmptyList']):
         """Initializes the state of the NonEmptyList.
 
         Args:
@@ -208,6 +222,22 @@ class NonEmptyList(PolymorphicList[T]):
         else:
             return self.next.get(index - 1)
 
+    def index_of(self, element: T) -> int:
+        """Finds the index of the first occurence of element param in the polymorphic list
+
+        Args:
+            element (T): The type T element to look for.
+
+        Raises:
+            ValueError: raised if the element not in list
+
+        Returns:
+            int: The index of the first occurence of element if found
+        """
+        if (self.data != element):
+            return 1 + self.next.index_of(element)
+        return 0
+
 
 class EmptyList(PolymorphicList[T]):
     """Represents a EmptyList, the last node in the abstraction, which has no data or next pointer
@@ -295,3 +325,17 @@ class EmptyList(PolymorphicList[T]):
             NonEmptyList: Returns the NonEmptyList at the input index if exists.
         """
         raise IndexError("Index out of range")
+
+    def index_of(self, element: T) -> int:
+        """Finds the index of the first occurence of element param in the polymorphic list
+
+        Args:
+            element (T): The type T element to look for.
+
+        Raises:
+            ValueError: raised if the element not in list
+
+        Returns:
+            int: The index of the first occurence of element if found
+        """
+        raise ValueError("`element` does not exist in the list")
