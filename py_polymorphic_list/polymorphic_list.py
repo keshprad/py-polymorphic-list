@@ -6,8 +6,11 @@ T = TypeVar("T")
 class PolymorphicList(Generic[T]):
     """A generic class to represent a polymorphic list that stores objects of type T
 
-    This class throws errors for every method because it is not meant to be instantiated. 
-    It is meant to act like an interface, which the NonEmptyList and EmptyList classes extend.
+    This class is the superclass of EmptyList and NonEmptyList.
+    It throws errors for every method because it is not meant to be instantiated, 
+    but instead act like an interface.
+    Therefore, if a parameter or return type is PolymorphicList, it expects either 
+    a NonEmptyList or EmptyList.
 
     Args:
         Generic (T): The type of the objects that will be stored in the list.
@@ -80,6 +83,20 @@ class PolymorphicList(Generic[T]):
         """
         raise NotImplementedError()
 
+    def get(self, index: int) -> 'NonEmptyList':
+        """Gets the NonEmptyList at the given index
+
+        Args:
+            index (int): An index in the array
+
+        Raises:
+            IndexError: raised for invalid indices
+
+        Returns:
+            NonEmptyList: Returns the NonEmptyList at the input index if exists.
+        """
+        raise IndexError("Index out of range")
+
 
 class NonEmptyList(PolymorphicList[T]):
     """Represents a NonEmptyList with a T type data, and a reference to the next node in the abstraction
@@ -122,7 +139,8 @@ class NonEmptyList(PolymorphicList[T]):
         Returns:
             bool: a bool indication whether the current object is equal to the given object
         """
-        if (isinstance(other, NonEmptyList) and self.data == other.data):
+        if (isinstance(other, NonEmptyList) and self.data == other.data
+                and self.size() == other.size()):
             return self.next == other.next
         return False
 
@@ -170,6 +188,25 @@ class NonEmptyList(PolymorphicList[T]):
             NonEmptyList: Object for the new list after prepend operation.
         """
         return NonEmptyList(element, self)
+
+    def get(self, index: int) -> 'NonEmptyList':
+        """Gets the NonEmptyList at the given index
+
+        Args:
+            index (int): An index in the array
+
+        Raises:
+            IndexError: raised for invalid indices
+
+        Returns:
+            NonEmptyList: Returns the NonEmptyList at the input index if exists.
+        """
+        if index > self.size() - 1 or index < 0:
+            raise IndexError("Index out of range")
+        elif index == 0:
+            return self
+        else:
+            return self.next.get(index - 1)
 
 
 class EmptyList(PolymorphicList[T]):
@@ -244,3 +281,17 @@ class EmptyList(PolymorphicList[T]):
             NonEmptyList: Object for the new list after prepend operation.
         """
         return NonEmptyList(element, self)
+
+    def get(self, index: int) -> NonEmptyList:
+        """Gets the NonEmptyList at the given index
+
+        Args:
+            index (int): An index in the array
+
+        Raises:
+            IndexError: raised for invalid indices
+
+        Returns:
+            NonEmptyList: Returns the NonEmptyList at the input index if exists.
+        """
+        raise IndexError("Index out of range")
