@@ -1,3 +1,4 @@
+from .exceptions import ListIsEmptyError
 from typing import Generic, TypeVar, Union
 
 T = TypeVar("T")
@@ -9,8 +10,6 @@ class PolymorphicList(Generic[T]):
     This class is the superclass of EmptyList and NonEmptyList.
     It throws errors for every method because it is not meant to be instantiated, 
     but instead act like an interface.
-    Therefore, if a parameter or return type is PolymorphicList, it expects either 
-    a NonEmptyList or EmptyList.
 
     Args:
         Generic (T): The type of the objects that will be stored in the list.
@@ -97,6 +96,17 @@ class PolymorphicList(Generic[T]):
         """
         raise NotImplementedError()
 
+    def get_last(self) -> 'NonEmptyList':
+        """Gets the last NonEmptyList element in the list.
+
+        Raises:
+            ListIsEmptyError: raised since an EmptyList has no last element.
+
+        Returns:
+            NonEmptyList: returns the last NonEmptyList object in the list
+        """
+        raise NotImplementedError()
+
     def index_of(self, element: T) -> int:
         """Finds the index of the first occurence of element param in the polymorphic list
 
@@ -126,7 +136,7 @@ class NonEmptyList(PolymorphicList[T]):
             next (PolymorphicList): Reference to the next node
         """
         self.data: T = data
-        self.next: PolymorphicList[T] = next
+        self.next: Union['NonEmptyList', 'EmptyList'] = next
         self.length: int = self.next.length + 1
 
     def __str__(self) -> str:
@@ -170,6 +180,8 @@ class NonEmptyList(PolymorphicList[T]):
         if self.data == element:
             return True
         return element in self.next
+
+    # def __add__(self, other: object) -> Union['NonEmptyList', 'EmptyList']:
 
     def size(self) -> int:
         """Finds the size/length of the list
@@ -221,6 +233,17 @@ class NonEmptyList(PolymorphicList[T]):
             return self
         else:
             return self.next.get(index - 1)
+
+    def get_last(self) -> 'NonEmptyList':
+        """Gets the last NonEmptyList element in the list.
+
+        Returns:
+            NonEmptyList: returns the last NonEmptyList object in the list
+        """
+        try:
+            return self.next.get_last()
+        except ListIsEmptyError:
+            return self
 
     def index_of(self, element: T) -> int:
         """Finds the index of the first occurence of element param in the polymorphic list
@@ -325,6 +348,14 @@ class EmptyList(PolymorphicList[T]):
             NonEmptyList: Returns the NonEmptyList at the input index if exists.
         """
         raise IndexError("Index out of range")
+
+    def get_last(self) -> 'NonEmptyList':
+        """Gets the last NonEmptyList element in the list. Raises ListIsEmptyError if this is an EmptyList
+
+        Raises:
+            ListIsEmptyError: raised since an EmptyList has no last element.
+        """
+        raise ListIsEmptyError("The list is empty.")
 
     def index_of(self, element: T) -> int:
         """Finds the index of the first occurence of element param in the polymorphic list
