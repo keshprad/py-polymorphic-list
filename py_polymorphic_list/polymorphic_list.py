@@ -10,8 +10,9 @@ class PolymorphicList(Generic[T]):
     """A generic class to represent a polymorphic list that stores objects of type T
 
     This class is the superclass of EmptyList and NonEmptyList.
-    It throws errors for every method because it is not meant to be instantiated, 
-    but instead act like an interface.
+    This class is not meant to be instantiated, so the __init__ method also raises errors.
+    It throws errors for many method because the subclasses define these methods.
+    Only methods that have the same implementation in NonEmptyList and EmptyList are implemented here.
 
     Args:
         Generic (T): The type of the objects that will be stored in the list.
@@ -62,13 +63,31 @@ class PolymorphicList(Generic[T]):
         """
         raise NotImplementedError()
 
+    def __add__(self, other: object) -> 'PolymorphicList[T]':
+        """Adds two Polymorphic lists together, independent of the input lists
+
+        Args:
+            other (PolymorphicList[T]): The list to add to current list.
+
+        Raises:
+            TypeError: TypeError raised if other is not a PolymorphicList
+
+        Returns:
+            PolymorphicList[T]: returns either an EmptyList[T] or a NonEmptyList[T] with elements of the two lists together
+        """
+        if (isinstance(other, PolymorphicList)):
+            return copy(self)._add(copy(other))
+        else:
+            raise TypeError(
+                "`other` must be an object with super type PolymorphicList")
+
     def size(self) -> int:
         """Finds the size/length of the list
 
         Returns:
             int: The size/length of the list
         """
-        raise NotImplementedError()
+        return self.length
 
     def append(self, element: T) -> 'NonEmptyList[T]':
         """Appends an element to the beginning of the list
@@ -138,7 +157,7 @@ class NonEmptyList(PolymorphicList[T]):
     Args:
         PolymorphicList ([type]): Extends the PolymorphicList class to have a generic type T.
     """
-    def __init__(self, data, next: Union['NonEmptyList', 'EmptyList']):
+    def __init__(self, data, next: Union['NonEmptyList[T]', 'EmptyList[T]']):
         """Initializes the state of the NonEmptyList.
 
         Args:
@@ -199,13 +218,18 @@ class NonEmptyList(PolymorphicList[T]):
         """
         return NonEmptyList(self.data, copy(self.next))
 
-    def size(self) -> int:
-        """Finds the size/length of the list
+    def _add(self, other: PolymorphicList[T]) -> 'NonEmptyList[T]':
+        """Helper method for __add__. Adds two lists together
+
+        Args:
+            other (PolymorphicList[T]): The list to add to current list.
 
         Returns:
-            int: The size/length of the list
+            NonEmptyList: Returns a NonEmptyList result of adding the two lists together.
         """
-        return self.length
+        self.next = self.next + other
+        self.length += other.length
+        return self
 
     def append(self, element: T) -> 'NonEmptyList[T]':
         """Appends an element to the beginning of the list
@@ -329,13 +353,16 @@ class EmptyList(PolymorphicList[T]):
         """
         return EmptyList()
 
-    def size(self) -> int:
-        """Finds the size/length of the list
+    def _add(self, other: PolymorphicList[T]) -> PolymorphicList[T]:
+        """Helper method for __add__. Adds two lists together
+
+        Args:
+            other (PolymorphicList[T]): The list to add to current list.
 
         Returns:
-            int: The size/length of the list
+            PolymorphicList[T]: Returns a either a NonEmptyList or EmptyList result of adding the two lists together.
         """
-        return self.length
+        return other
 
     def append(self, element: T) -> NonEmptyList[T]:
         """Appends an element to the beginning of the list
