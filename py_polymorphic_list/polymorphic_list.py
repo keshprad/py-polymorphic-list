@@ -137,6 +137,17 @@ class PolymorphicList(Generic[T]):
         """
         raise NotImplementedError()
 
+    def remove_first(self) -> Union['NonEmptyList[T]', 'EmptyList[T]']:
+        """Removes the first element from the list
+
+        Raises:
+            ListIsEmptyError: Raised if the list is empty, and no first element can be removed.
+
+        Returns:
+            Union[NonEmptyList[T], EmptyList[T]]: The new head of the list
+        """
+        raise NotImplementedError()
+
     def get(self, index: int) -> 'NonEmptyList[T]':
         """Gets the NonEmptyList at the given index
 
@@ -304,6 +315,17 @@ class NonEmptyList(PolymorphicList[T]):
             self.length += 1
         return self
 
+    def remove_first(self) -> Union['NonEmptyList[T]', 'EmptyList[T]']:
+        """Removes the first element from the list
+
+        Raises:
+            ListIsEmptyError: Raised if the list is empty, and no first element can be removed.
+
+        Returns:
+            Union[NonEmptyList[T], EmptyList[T]]: The new head of the list
+        """
+        return self.next
+
     def get(self, index: int) -> 'NonEmptyList[T]':
         """Gets the NonEmptyList at the given index
 
@@ -447,6 +469,17 @@ class EmptyList(PolymorphicList[T]):
             NonEmptyList[T]: The new list after insert operation.
         """
         raise IndexError("Index out of range")
+
+    def remove_first(self) -> Union['NonEmptyList[T]', 'EmptyList[T]']:
+        """Removes the first element from the list
+
+        Raises:
+            ListIsEmptyError: Raised if the list is empty, and no first element can be removed.
+
+        Returns:
+            Union[NonEmptyList[T], EmptyList[T]]: The new head of the list
+        """
+        raise ListIsEmptyError()
 
     def get(self, index: int) -> NonEmptyList[T]:
         """Gets the NonEmptyList at the given index
