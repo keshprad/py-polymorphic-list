@@ -81,6 +81,17 @@ class PolymorphicList(Generic[T]):
             raise TypeError(
                 "`other` must be an object with super type PolymorphicList")
 
+    def _add(self, other: 'PolymorphicList[T]') -> 'PolymorphicList[T]':
+        """Helper method for __add__. Adds two lists together
+
+        Args:
+            other (PolymorphicList[T]): The list to add to current list.
+
+        Returns:
+            PolymorphicList[T]: Returns a either a NonEmptyList or EmptyList result of adding the two lists together.
+        """
+        raise NotImplementedError()
+
     def size(self) -> int:
         """Finds the size/length of the list
 
@@ -108,6 +119,17 @@ class PolymorphicList(Generic[T]):
 
         Returns:
             NonEmptyList: Object for the new list after prepend operation.
+        """
+        raise NotImplementedError()
+
+    def insert(self, element: T, index: int) -> 'NonEmptyList[T]':
+        """Inserts a specified element at the specified index in the list
+
+        Raises:
+            IndexError: raised if the specified index is out of range
+
+        Returns:
+            NonEmptyList[T]: The new list after insert operation.
         """
         raise NotImplementedError()
 
@@ -255,6 +277,27 @@ class NonEmptyList(PolymorphicList[T]):
         """
         return NonEmptyList(element, self)
 
+    def insert(self, element: T, index: int) -> 'NonEmptyList[T]':
+        """Inserts a specified element at the specified index in the list
+
+        Raises:
+            IndexError: raised if the specified index is out of range
+
+        Returns:
+            NonEmptyList[T]: The new list after insert operation.
+        """
+        if index > self.size() or index < 0:
+            raise IndexError("Index out of range")
+        elif index == 0:
+            return NonEmptyList(element, self)
+        elif index == 1:
+            self.next = NonEmptyList(element, self.next)
+            self.length += 1
+        else:
+            self.next.insert(element, index - 1)
+            self.length += 1
+        return self
+
     def get(self, index: int) -> 'NonEmptyList[T]':
         """Gets the NonEmptyList at the given index
 
@@ -385,6 +428,17 @@ class EmptyList(PolymorphicList[T]):
             NonEmptyList: Object for the new list after prepend operation.
         """
         return NonEmptyList(element, self)
+
+    def insert(self, element: T, index: int) -> NonEmptyList[T]:
+        """Inserts a specified element at the specified index in the list
+
+        Raises:
+            IndexError: raised if the specified index is out of range
+
+        Returns:
+            NonEmptyList[T]: The new list after insert operation.
+        """
+        raise IndexError("Index out of range")
 
     def get(self, index: int) -> NonEmptyList[T]:
         """Gets the NonEmptyList at the given index
