@@ -23,6 +23,7 @@ class PolymorphicList(Generic[T]):
         Raises:
             NotImplementedError: Prevent instantiation of a list object.
         """
+        self.length = 0
         raise NotImplementedError()
 
     def __str__(self) -> str:
@@ -55,7 +56,7 @@ class PolymorphicList(Generic[T]):
         """
         raise NotImplementedError()
 
-    def __copy__(self) -> 'Union[NonEmptyList[T], EmptyList[T]]':
+    def __copy__(self) -> Union['NonEmptyList[T]', 'EmptyList[T]']:
         """Returns a copy of the list
 
         Returns:
@@ -63,7 +64,8 @@ class PolymorphicList(Generic[T]):
         """
         raise NotImplementedError()
 
-    def __add__(self, other: object) -> 'PolymorphicList[T]':
+    def __add__(self,
+                other: object) -> Union['NonEmptyList[T]', 'EmptyList[T]']:
         """Adds two Polymorphic lists together, independent of the input lists
 
         Args:
@@ -73,22 +75,24 @@ class PolymorphicList(Generic[T]):
             TypeError: TypeError raised if other is not a PolymorphicList
 
         Returns:
-            PolymorphicList[T]: returns either an EmptyList[T] or a NonEmptyList[T] with elements of the two lists together
+            Union[NonEmptyList[T], EmptyList[T]]: returns either an EmptyList[T] or a NonEmptyList[T] with elements of the two lists together
         """
-        if (isinstance(other, PolymorphicList)):
+        if (isinstance(other, NonEmptyList) or isinstance(other, EmptyList)):
             return copy(self)._add(copy(other))
         else:
             raise TypeError(
                 "`other` must be an object with super type PolymorphicList")
 
-    def _add(self, other: 'PolymorphicList[T]') -> 'PolymorphicList[T]':
+    def _add(
+        self, other: Union['NonEmptyList[T]', 'EmptyList[T]']
+    ) -> Union['NonEmptyList[T]', 'EmptyList[T]']:
         """Helper method for __add__. Adds two lists together
 
         Args:
-            other (PolymorphicList[T]): The list to add to current list.
+            other (Union[NonEmptyList[T], EmptyList[T]]): The list to add to current list.
 
         Returns:
-            PolymorphicList[T]: Returns a either a NonEmptyList or EmptyList result of adding the two lists together.
+            Union[NonEmptyList[T], EmptyList[T]]: Returns a NonEmptyList result of adding the two lists together.
         """
         raise NotImplementedError()
 
@@ -187,7 +191,7 @@ class NonEmptyList(PolymorphicList[T]):
             next (PolymorphicList): Reference to the next node
         """
         self.data: T = data
-        self.next: Union['NonEmptyList', 'EmptyList'] = next
+        self.next: Union['NonEmptyList[T]', 'EmptyList[T]'] = next
         self.length: int = self.next.length + 1
 
     def __str__(self) -> str:
@@ -240,14 +244,16 @@ class NonEmptyList(PolymorphicList[T]):
         """
         return NonEmptyList(self.data, copy(self.next))
 
-    def _add(self, other: PolymorphicList[T]) -> 'NonEmptyList[T]':
+    def _add(
+        self, other: Union['NonEmptyList[T]', 'EmptyList[T]']
+    ) -> Union['NonEmptyList[T]', 'EmptyList[T]']:
         """Helper method for __add__. Adds two lists together
 
         Args:
-            other (PolymorphicList[T]): The list to add to current list.
+            other (Union[NonEmptyList[T], EmptyList[T]]): The list to add to current list.
 
         Returns:
-            NonEmptyList: Returns a NonEmptyList result of adding the two lists together.
+            Union['NonEmptyList[T]', 'EmptyList[T]']: Returns a NonEmptyList result of adding the two lists together.
         """
         self.next = self.next + other
         self.length += other.length
@@ -396,14 +402,16 @@ class EmptyList(PolymorphicList[T]):
         """
         return EmptyList()
 
-    def _add(self, other: PolymorphicList[T]) -> PolymorphicList[T]:
+    def _add(
+        self, other: Union['NonEmptyList[T]', 'EmptyList[T]']
+    ) -> Union['NonEmptyList[T]', 'EmptyList[T]']:
         """Helper method for __add__. Adds two lists together
 
         Args:
-            other (PolymorphicList[T]): The list to add to current list.
+            other (Union[NonEmptyList[T], EmptyList[T]]): The list to add to current list.
 
         Returns:
-            PolymorphicList[T]: Returns a either a NonEmptyList or EmptyList result of adding the two lists together.
+            Union[NonEmptyList[T], EmptyList[T]]: Returns a NonEmptyList result of adding the two lists together.
         """
         return other
 
