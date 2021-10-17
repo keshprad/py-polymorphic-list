@@ -148,6 +148,17 @@ class PolymorphicList(Generic[T]):
         """
         raise NotImplementedError()
 
+    def remove_tail(self) -> Union['NonEmptyList[T]', 'EmptyList[T]']:
+        """Removes the last element from the list.
+
+        Raises:
+            ListIsEmptyError: Raised if the list is empty, and no first element can be removed.
+        
+        Returns:
+            Union[NonEmptyList[T], EmptyList[T]]: The new head of the list
+        """
+        raise NotImplementedError()
+
     def get(self, index: int) -> 'NonEmptyList[T]':
         """Gets the NonEmptyList at the given index
 
@@ -327,6 +338,14 @@ class NonEmptyList(PolymorphicList[T]):
         return self.next
 
     def remove_tail(self) -> Union['NonEmptyList[T]', 'EmptyList[T]']:
+        """Removes the last element from the list.
+
+        Raises:
+            ListIsEmptyError: Raised if the list is empty, and no first element can be removed.
+        
+        Returns:
+            Union[NonEmptyList[T], EmptyList[T]]: The new head of the list
+        """
         try:
             self.next = self.next.remove_tail()
             self.length -= 1
@@ -490,6 +509,14 @@ class EmptyList(PolymorphicList[T]):
         raise ListIsEmptyError()
 
     def remove_tail(self) -> Union['NonEmptyList[T]', 'EmptyList[T]']:
+        """Removes the last element from the list.
+
+        Raises:
+            ListIsEmptyError: Raised if the list is empty, and no first element can be removed.
+        
+        Returns:
+            Union[NonEmptyList[T], EmptyList[T]]: The new head of the list
+        """
         raise ListIsEmptyError()
 
     def get(self, index: int) -> NonEmptyList[T]:
