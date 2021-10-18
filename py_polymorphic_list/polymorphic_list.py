@@ -210,7 +210,7 @@ class PolymorphicList(Generic[T]):
         """
         raise NotImplementedError()
 
-    def get_last(self) -> 'NonEmptyList[T]':
+    def get_tail(self) -> 'NonEmptyList[T]':
         """Gets the last NonEmptyList element in the list.
 
         Raises:
@@ -468,14 +468,14 @@ class NonEmptyList(PolymorphicList[T]):
         else:
             return self.next.get(index - 1)
 
-    def get_last(self) -> 'NonEmptyList[T]':
+    def get_tail(self) -> 'NonEmptyList[T]':
         """Gets the last NonEmptyList element in the list.
 
         Returns:
             NonEmptyList: returns the last NonEmptyList object in the list
         """
         try:
-            return self.next.get_last()
+            return self.next.get_tail()
         except ListIsEmptyError:
             return self
 
@@ -667,7 +667,7 @@ class EmptyList(PolymorphicList[T]):
         """
         raise IndexError("Index out of range")
 
-    def get_last(self) -> NonEmptyList[T]:
+    def get_tail(self) -> NonEmptyList[T]:
         """Gets the last NonEmptyList element in the list. Raises ListIsEmptyError if this is an EmptyList
 
         Raises:
