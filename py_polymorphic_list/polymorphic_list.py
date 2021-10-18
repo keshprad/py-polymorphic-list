@@ -171,6 +171,19 @@ class PolymorphicList(Generic[T]):
         """
         raise NotImplementedError()
 
+    def remove_nth_occurrence(
+            self, element: T,
+            n: int) -> Union['NonEmptyList[T]', 'EmptyList[T]']:
+        """Removes the nth occurrence of a specified element from the list.
+
+        Raises:
+            ValueError: raised if there are fewer than n occurrences of n elements in the list
+        
+        Returns:
+            Union[NonEmptyList[T], EmptyList[T]]: The new head of the list after removing the element.
+        """
+        raise NotImplementedError()
+
     def remove_index(self,
                      index: int) -> Union['NonEmptyList[T]', 'EmptyList[T]']:
         """Removes the element at a given index if the index is valid
@@ -397,6 +410,28 @@ class NonEmptyList(PolymorphicList[T]):
             self.length -= 1
             return self
 
+    def remove_nth_occurrence(
+            self, element: T,
+            n: int) -> Union['NonEmptyList[T]', 'EmptyList[T]']:
+        """Removes the nth occurrence of a specified element from the list.
+
+        Raises:
+            ValueError: raised if there are fewer than n occurrences of n elements in the list
+        
+        Returns:
+            Union[NonEmptyList[T], EmptyList[T]]: The new head of the list after removing the element.
+        """
+        if self.data == element:
+            if n == 1:
+                return self.next
+            else:
+                self.next = self.next.remove_nth_occurrence(element, n - 1)
+        else:
+            self.next = self.next.remove_nth_occurrence(element, n)
+
+        self.length -= 1
+        return self
+
     def remove_index(self,
                      index: int) -> Union['NonEmptyList[T]', 'EmptyList[T]']:
         """Removes the element at a given index if the index is valid
@@ -591,6 +626,20 @@ class EmptyList(PolymorphicList[T]):
             Union[NonEmptyList[T], EmptyList[T]]: The new head of the list after the element is removed.
         """
         raise ValueError("`element` does not exist in the list")
+
+    def remove_nth_occurrence(
+            self, element: T,
+            n: int) -> Union['NonEmptyList[T]', 'EmptyList[T]']:
+        """Removes the nth occurrence of a specified element from the list.
+
+        Raises:
+            ValueError: raised if there are fewer than n occurrences of n elements in the list
+        
+        Returns:
+            Union[NonEmptyList[T], EmptyList[T]]: The new head of the list after removing the element.
+        """
+        raise ValueError(
+            "There are fewer than `n` occurrences `element` in the list")
 
     def remove_index(self,
                      index: int) -> Union['NonEmptyList[T]', 'EmptyList[T]']:
