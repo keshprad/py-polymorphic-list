@@ -175,9 +175,13 @@ class PolymorphicList(Generic[T]):
             self, element: T,
             n: int) -> Union['NonEmptyList[T]', 'EmptyList[T]']:
         """Removes the nth occurrence of a specified element from the list.
-
+        
+        Args:
+            element (T): The element to look for
+            n (int): int for the nth occurrence to look for
+        
         Raises:
-            ValueError: raised if there are fewer than n occurrences of n elements in the list
+            ValueError: raised if there are fewer than n occurrences of element in the list
         
         Returns:
             Union[NonEmptyList[T], EmptyList[T]]: The new head of the list after removing the element.
@@ -218,6 +222,21 @@ class PolymorphicList(Generic[T]):
 
         Returns:
             NonEmptyList: returns the last NonEmptyList object in the list
+        """
+        raise NotImplementedError()
+
+    def get_nth_occurrence(self, element: T, n: int) -> 'NonEmptyList[T]':
+        """Gets the nth occurrence of the element
+
+        Args:
+            element (T): The element to look for
+            n (int): int for the nth occurrence to look for
+
+        Raises:
+            ValueError: raised if there are fewer than n occurrences of element in the list
+
+        Returns:
+            NonEmptyList[T]: The node with the nth occurrence of the element, if found in the list
         """
         raise NotImplementedError()
 
@@ -414,9 +433,13 @@ class NonEmptyList(PolymorphicList[T]):
             self, element: T,
             n: int) -> Union['NonEmptyList[T]', 'EmptyList[T]']:
         """Removes the nth occurrence of a specified element from the list.
-
+        
+        Args:
+            element (T): The element to look for
+            n (int): int for the nth occurrence to look for
+        
         Raises:
-            ValueError: raised if there are fewer than n occurrences of n elements in the list
+            ValueError: raised if there are fewer than n occurrences of element in the list
         
         Returns:
             Union[NonEmptyList[T], EmptyList[T]]: The new head of the list after removing the element.
@@ -478,6 +501,27 @@ class NonEmptyList(PolymorphicList[T]):
             return self.next.get_tail()
         except ListIsEmptyError:
             return self
+
+    def get_nth_occurrence(self, element: T, n: int) -> 'NonEmptyList[T]':
+        """Gets the nth occurrence of the element
+
+        Args:
+            element (T): The element to look for
+            n (int): int for the nth occurrence to look for
+
+        Raises:
+            ValueError: raised if there are fewer than n occurrences of element in the list
+
+        Returns:
+            NonEmptyList[T]: The node with the nth occurrence of the element, if found in the list
+        """
+        if self.data == element:
+            if n == 1:
+                return self
+            else:
+                return self.next.get_nth_occurrence(element, n - 1)
+        else:
+            return self.next.get_nth_occurrence(element, n)
 
     def index_of(self, element: T) -> int:
         """Finds the index of the first occurence of element param in the polymorphic list
@@ -632,8 +676,12 @@ class EmptyList(PolymorphicList[T]):
             n: int) -> Union['NonEmptyList[T]', 'EmptyList[T]']:
         """Removes the nth occurrence of a specified element from the list.
 
+        Args:
+            element (T): The element to look for
+            n (int): int for the nth occurrence to look for
+        
         Raises:
-            ValueError: raised if there are fewer than n occurrences of n elements in the list
+            ValueError: raised if there are fewer than n occurrences of element in the list
         
         Returns:
             Union[NonEmptyList[T], EmptyList[T]]: The new head of the list after removing the element.
@@ -674,6 +722,22 @@ class EmptyList(PolymorphicList[T]):
             ListIsEmptyError: raised since an EmptyList has no last element.
         """
         raise ListIsEmptyError("The list is empty.")
+
+    def get_nth_occurrence(self, element: T, n: int) -> NonEmptyList[T]:
+        """Gets the nth occurrence of the element
+
+        Args:
+            element (T): The element to look for
+            n (int): int for the nth occurrence to look for
+
+        Raises:
+            ValueError: raised if there are fewer than n occurrences of element in the list
+
+        Returns:
+            NonEmptyList[T]: The node with the nth occurrence of the element, if found in the list
+        """
+        raise ValueError(
+            "There are fewer than `n` occurrences `element` in the list")
 
     def index_of(self, element: T) -> int:
         """Finds the index of the first occurence of element param in the polymorphic list
