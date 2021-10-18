@@ -171,6 +171,18 @@ class PolymorphicList(Generic[T]):
         """
         raise NotImplementedError()
 
+    def remove_index(self,
+                     index: int) -> Union['NonEmptyList[T]', 'EmptyList[T]']:
+        """Removes the element at a given index if the index is valid
+
+        Raises:
+            IndexError: Raised if the index is invalid
+            
+        Returns:
+            Union[NonEmptyList[T], EmptyList[T]]: The new head of the resulting list after removing the element.
+        """
+        raise NotImplementedError()
+
     def get(self, index: int) -> 'NonEmptyList[T]':
         """Gets the NonEmptyList at the given index
 
@@ -385,6 +397,23 @@ class NonEmptyList(PolymorphicList[T]):
             self.length -= 1
             return self
 
+    def remove_index(self,
+                     index: int) -> Union['NonEmptyList[T]', 'EmptyList[T]']:
+        """Removes the element at a given index if the index is valid
+
+        Raises:
+            IndexError: Raised if the index is invalid
+            
+        Returns:
+            Union[NonEmptyList[T], EmptyList[T]]: The new head of the resulting list after removing the element.
+        """
+        if index == 0:
+            return self.next
+        else:
+            self.next = self.next.remove_index(index - 1)
+            self.length -= 1
+            return self
+
     def get(self, index: int) -> 'NonEmptyList[T]':
         """Gets the NonEmptyList at the given index
 
@@ -562,6 +591,18 @@ class EmptyList(PolymorphicList[T]):
             Union[NonEmptyList[T], EmptyList[T]]: The new head of the list after the element is removed.
         """
         raise ValueError("`element` does not exist in the list")
+
+    def remove_index(self,
+                     index: int) -> Union['NonEmptyList[T]', 'EmptyList[T]']:
+        """Removes the element at a given index if the index is valid
+
+        Raises:
+            IndexError: Raised if the index is invalid
+
+        Returns:
+            Union[NonEmptyList[T], EmptyList[T]]: The new head of the resulting list after removing the element.
+        """
+        raise IndexError("Index out of range")
 
     def get(self, index: int) -> NonEmptyList[T]:
         """Gets the NonEmptyList at the given index
