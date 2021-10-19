@@ -6,16 +6,16 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: 'py_polymorphic_list',
+  title: 'py-polymorphic-list',
   tagline: 'Dinosaurs are cool',
   url: 'https://keshprad.github.io/',
-  baseUrl: '/py_polymorphic_list/',
+  baseUrl: '/py-polymorphic-list/',
   trailingSlash: true,
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
   favicon: 'https://keshprad.github.io/my-portfolio/favicon.ico',
   organizationName: 'keshprad', // Usually your GitHub org/user name.
-  projectName: 'py_polymorphic_list', // Usually your repo name.
+  projectName: 'py-polymorphic-list', // Usually your repo name.
 
   presets: [
     [
@@ -26,7 +26,8 @@ const config = {
           sidebarPath: require.resolve('./sidebars.js'),
           // Please change this to your repo.
           editUrl:
-            'https://github.com/keshprad/py_polymorphic_list/edit/main/docs/',
+            'https://github.com/keshprad/py-polymorphic-list/edit/main/docs/',
+          sidebarCollapsed: false,
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
@@ -42,7 +43,7 @@ const config = {
         defaultMode: 'dark',
       },
       navbar: {
-        title: 'py_polymorphic_list',
+        title: 'py-polymorphic-list',
         items: [
           {
             type: 'doc',
@@ -51,8 +52,13 @@ const config = {
             label: 'Docs',
           },
           {
-            href: 'https://github.com/keshprad/py_polymorphic_list',
+            href: 'https://github.com/keshprad/py-polymorphic-list/',
             label: 'GitHub',
+            position: 'right',
+          },
+          {
+            href: 'https://pypi.org/project/py-polymorphic-list/',
+            label: 'PyPI',
             position: 'right',
           },
         ],
@@ -68,8 +74,8 @@ const config = {
                 to: '/docs/intro',
               },
               {
-                label: 'Usage',
-                to: '/docs/usage',
+                label: 'Installation',
+                to: '/docs/getting-started/installation/',
               },
             ],
           },
@@ -78,11 +84,11 @@ const config = {
             items: [
               {
                 label: 'PyPI',
-                href: 'https://pypi.org/manage/project/py-polymorphic-list/',
+                href: 'https://pypi.org/project/py-polymorphic-list/',
               },
               {
                 label: 'GitHub',
-                href: 'https://github.com/keshprad/py_polymorphic_list',
+                href: 'https://github.com/keshprad/py-polymorphic-list',
               },
             ],
           },
