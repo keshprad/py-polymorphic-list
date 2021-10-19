@@ -64,11 +64,11 @@ const config = {
             title: 'Docs',
             items: [
               {
-                label: 'Tutorial',
+                label: 'Intro',
                 to: '/docs/intro',
               },
               {
-                label: 'Tutorial',
+                label: 'Usage',
                 to: '/docs/usage',
               },
             ],
@@ -76,6 +76,10 @@ const config = {
           {
             title: 'More',
             items: [
+              {
+                label: 'PyPI',
+                href: 'https://pypi.org/manage/project/py-polymorphic-list/',
+              },
               {
                 label: 'GitHub',
                 href: 'https://github.com/keshprad/py_polymorphic_list',

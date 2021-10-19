@@ -1,35 +1,18 @@
 ---
 sidebar_position: 1
+title: 'Intro'
 ---
 
-# Tutorial Intro
+# py_polymorphic_list
 
-Let's discover **Docusaurus in less than 5 minutes**.
+[![Publish to PyPI](https://github.com/keshprad/py_polymorphic_list/actions/workflows/publish.yml/badge.svg)](https://github.com/keshprad/py_polymorphic_list/actions/workflows/publish.yml)[![Deploy docs to GitHub Pages](https://github.com/keshprad/py_polymorphic_list/actions/workflows/docs.yml/badge.svg)](https://github.com/keshprad/py_polymorphic_list/actions/workflows/docs.yml)
 
-## Getting Started
+Python implementation of a polymorphic list
 
-Get started by **creating a new site**.
+[View on PyPI](https://pypi.org/project/py-polymorphic-list/) / [Documentation](https://keshprad.github.io/py_polymorphic_list/) / [GitHub Source Code](https://github.com/keshprad/py_polymorphic_list/)
 
-Or **try Docusaurus immediately** with **[docusaurus.new](https://docusaurus.new)**.
+## What is a Polymorphic List?
 
-## Generate a new site
+A polymorphic list is a data abstraction similar to LinkedLists where objects of two classes, `NonEmptyList`, and `EmptyList`, are employed to cleanly handle edge cases where a LinkedList would be `null`. In a LinkedList, the last node's `next` reference is `null`; however, for a PolymorphicList, the last node's `next` reference is an `EmptyList`, allowing the EmptyList object to override methods defined in a PolymorphicList.
 
-Generate a new Docusaurus site using the **classic template**:
-
-```shell
-npm init docusaurus@latest my-website classic
-```
-
-## Start your site
-
-Run the development server:
-
-```shell
-cd my-website
-
-npx docusaurus start
-```
-
-Your site starts at `http://localhost:3000`.
-
-Open `docs/intro.md` and edit some lines: the site **reloads automatically** and display your changes.
+This means that every method is overridden to have a version for a NonEmptyList and for an EmptyList.
