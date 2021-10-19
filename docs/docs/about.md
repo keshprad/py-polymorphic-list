@@ -1,11 +1,11 @@
 ---
 sidebar_position: 1
-title: 'Intro'
+title: 'About'
 ---
 
 # py-polymorphic-list
 
-[![Publish to PyPI](https://github.com/keshprad/py_polymorphic_list/actions/workflows/publish.yml/badge.svg)](https://github.com/keshprad/py-polymorphic-list/actions/workflows/publish.yml)[![Deploy docs to GitHub Pages](https://github.com/keshprad/py_polymorphic_list/actions/workflows/docs.yml/badge.svg)](https://github.com/keshprad/py-polymorphic-list/actions/workflows/docs.yml)
+[![Publish to PyPI](https://github.com/keshprad/py_polymorphic_list/actions/workflows/publish.yml/badge.svg)](https://github.com/keshprad/py-polymorphic-list/actions/workflows/publish.yml) [![Deploy docs to GitHub Pages](https://github.com/keshprad/py_polymorphic_list/actions/workflows/docs.yml/badge.svg)](https://github.com/keshprad/py-polymorphic-list/actions/workflows/docs.yml)
 
 Python implementation of a polymorphic list
 
