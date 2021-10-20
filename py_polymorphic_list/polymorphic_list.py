@@ -174,7 +174,7 @@ class PolymorphicList(Generic[T]):
     def remove_nth_occurrence(
             self, element: T,
             n: int) -> Union['NonEmptyList[T]', 'EmptyList[T]']:
-        """Removes the nth occurrence of a specified element from the list.
+        """Removes the nth occurrence of the specified element from the list.
         
         Args:
             element (T): The element to look for
@@ -215,7 +215,7 @@ class PolymorphicList(Generic[T]):
         raise NotImplementedError()
 
     def get_tail(self) -> 'NonEmptyList[T]':
-        """Gets the last NonEmptyList element in the list.
+        """Gets the last NonEmptyList node in the list.
 
         Raises:
             ListIsEmptyError: raised since an EmptyList has no last element.
@@ -226,7 +226,7 @@ class PolymorphicList(Generic[T]):
         raise NotImplementedError()
 
     def get_nth_occurrence(self, element: T, n: int) -> 'NonEmptyList[T]':
-        """Gets the nth occurrence of the element
+        """Gets the NonEmptyList node with the nth occurrence of the element
 
         Args:
             element (T): The element to look for
@@ -241,7 +241,7 @@ class PolymorphicList(Generic[T]):
         raise NotImplementedError()
 
     def index_of(self, element: T) -> int:
-        """Finds the index of the first occurence of element param in the polymorphic list
+        """Finds the index of the first occurence of a specified element in the polymorphic list
 
         Args:
             element (T): The type T element to look for.
@@ -251,6 +251,17 @@ class PolymorphicList(Generic[T]):
 
         Returns:
             int: The index of the first occurence of element if found
+        """
+        raise NotImplementedError()
+
+    def count_occurrences(self, element: T) -> int:
+        """Counts the number of occurrences of element in the list.
+
+        Args:
+            element (T): The element to look for
+
+        Returns:
+            int: The num occurrences of element found
         """
         raise NotImplementedError()
 
@@ -539,6 +550,17 @@ class NonEmptyList(PolymorphicList[T]):
             return 1 + self.next.index_of(element)
         return 0
 
+    def count_occurrences(self, element: T) -> int:
+        """Counts the number of occurrences of element in the list.
+
+        Args:
+            element (T): The element to look for
+
+        Returns:
+            int: The num occurrences of element found
+        """
+        return (self.data == element) + self.next.count_occurrences(element)
+
 
 class EmptyList(PolymorphicList[T]):
     """Represents a EmptyList, the last node in the abstraction, which has no data or next pointer
@@ -752,3 +774,14 @@ class EmptyList(PolymorphicList[T]):
             int: The index of the first occurence of element if found
         """
         raise ValueError("`element` does not exist in the list")
+
+    def count_occurrences(self, element: T) -> int:
+        """Counts the number of occurrences of element in the list.
+
+        Args:
+            element (T): The element to look for
+
+        Returns:
+            int: The num occurrences of element found
+        """
+        return 0
