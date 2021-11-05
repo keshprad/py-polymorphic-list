@@ -188,6 +188,18 @@ class PolymorphicList(Generic[T]):
         """
         raise NotImplementedError()
 
+    def remove_all_occurrences(
+            self, element: T) -> Union['NonEmptyList[T]', 'EmptyList[T]']:
+        """Removes all occurrences of a specified element from the list.
+        
+        Args:
+            element (T): The element to look for
+        
+        Returns:
+            Union[NonEmptyList[T], EmptyList[T]]: The new head of the list after removing the element.
+        """
+        raise NotImplementedError()
+
     def remove_index(self,
                      index: int) -> Union['NonEmptyList[T]', 'EmptyList[T]']:
         """Removes the element at a given index if the index is valid
@@ -466,6 +478,22 @@ class NonEmptyList(PolymorphicList[T]):
         self.length -= 1
         return self
 
+    def remove_all_occurrences(
+            self, element: T) -> Union['NonEmptyList[T]', 'EmptyList[T]']:
+        """Removes all occurrences of a specified element from the list.
+        
+        Args:
+            element (T): The element to look for
+        
+        Returns:
+            Union[NonEmptyList[T], EmptyList[T]]: The new head of the list after removing the element.
+        """
+        if (self.data == element):
+            return self.next.remove_all_occurrences(element)
+        else:
+            self.next = self.next.remove_all_occurrences(element)
+            return self
+
     def remove_index(self,
                      index: int) -> Union['NonEmptyList[T]', 'EmptyList[T]']:
         """Removes the element at a given index if the index is valid
@@ -710,6 +738,18 @@ class EmptyList(PolymorphicList[T]):
         """
         raise ValueError(
             "There are fewer than `n` occurrences `element` in the list")
+
+    def remove_all_occurrences(
+            self, element: T) -> Union['NonEmptyList[T]', 'EmptyList[T]']:
+        """Removes all occurrences of a specified element from the list.
+        
+        Args:
+            element (T): The element to look for
+        
+        Returns:
+            Union[NonEmptyList[T], EmptyList[T]]: The new head of the list after removing the element.
+        """
+        return self
 
     def remove_index(self,
                      index: int) -> Union['NonEmptyList[T]', 'EmptyList[T]']:
